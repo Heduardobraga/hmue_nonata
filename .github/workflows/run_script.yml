@@ -1,0 +1,35 @@
+name: Rodar script automaticamente
+
+# Gatilhos para executar o workflow:
+on:
+  schedule:
+    - cron: '0 * * * *'   # todo início de hora (ajuste a frequência como quiser)
+  workflow_dispatch:      # permite rodar manualmente pelo GitHub UI
+
+jobs:
+  run-python-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Fazer checkout do código
+        uses: actions/checkout@v3
+
+      - name: Configurar Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Instalar dependências
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Criar arquivo de credenciais do Google
+        run: echo "${{ secrets.GOOGLE_CREDENTIALS_JSON }}" > credentials.json
+
+      - name: Executar script Python
+        run: python Base_Visitas_Nonata.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          PATH_CREDENTIALS: './credentials.json'
