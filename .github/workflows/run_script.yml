@@ -1,10 +1,9 @@
 name: Rodar script automaticamente
 
-# Gatilhos para executar o workflow:
 on:
   schedule:
-    - cron: '0 * * * *'   # todo início de hora (ajuste a frequência como quiser)
-  workflow_dispatch:      # permite rodar manualmente pelo GitHub UI
+    - cron: '0 * * * *'   # todo início de hora
+  workflow_dispatch:
 
 jobs:
   run-python-script:
