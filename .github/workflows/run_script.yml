@@ -2,7 +2,7 @@ name: Rodar script automaticamente
 
 on:
   schedule:
-    - cron: '0 * * * *'   # todo início de hora
+    - cron: '0 * * * *'   # Todo início de hora
   workflow_dispatch:
 
 jobs:
@@ -24,7 +24,9 @@ jobs:
           pip install -r requirements.txt
 
       - name: Criar arquivo de credenciais do Google
-        run: echo "${{ secrets.GOOGLE_CREDENTIALS_JSON }}" > credentials.json
+        run: |
+          echo "${{ secrets.GOOGLE_CREDENTIALS_JSON }}" > temp.json
+          cat temp.json | jq '.' > credentials.json
 
       - name: Executar script Python
         run: python Base_Visitas_Nonata.py
