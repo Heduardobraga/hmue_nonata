@@ -5,8 +5,22 @@ from datetime import datetime, timedelta
 import time
 from supabase import create_client, Client
 import os
+import json
 
 print("Iniciando o script...")
+
+# ==========================
+# CRIAR O ARQUIVO credentials.json A PARTIR DO SECRET
+# ==========================
+google_credentials_content = os.getenv('GOOGLE_CREDENTIALS_JSON')
+
+if google_credentials_content:
+    with open('credentials.json', 'w') as f:
+        json.dump(json.loads(google_credentials_content), f)
+    print("✅ Arquivo credentials.json criado a partir do Secret.")
+else:
+    print("❌ Variável de ambiente GOOGLE_CREDENTIALS_JSON não encontrada.")
+    exit(1)
 
 # ==========================
 # CONFIGURAÇÕES
@@ -14,8 +28,7 @@ print("Iniciando o script...")
 SUPABASE_URL = os.getenv('SUPABASE_URL')
 SUPABASE_KEY = os.getenv('SUPABASE_KEY')
 NOME_TABELA = "hmue_visitas"
-
-PATH_CREDENTIALS = os.getenv('PATH_CREDENTIALS', 'credentials.json')
+PATH_CREDENTIALS = 'credentials.json'
 SPREADSHEET_NAME = 'HMUE.Mapa de Visita'
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
@@ -137,7 +150,6 @@ tres_dias_atras = hoje - timedelta(days=2)
 
 df_final = df_final[df_final['nome_aba'] >= tres_dias_atras]
 
-# Converte de volta para string antes de enviar (evita o erro de serialização)
 df_final['nome_aba'] = df_final['nome_aba'].dt.strftime('%Y-%m-%d')
 
 print(f"✅ Total de registros a enviar (últimos 3 dias): {len(df_final)}")
