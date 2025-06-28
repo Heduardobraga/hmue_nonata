@@ -4,17 +4,18 @@ from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime, timedelta
 import time
 from supabase import create_client, Client
+import os
 
 print("Iniciando o script...")
 
 # ==========================
 # CONFIGURAÇÕES
 # ==========================
-SUPABASE_URL = "https://akccytzrgqsznadnlbzg.supabase.co"
-SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFrY2N5dHpyZ3Fzem5hZG5sYnpnIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MTA0NjEyOSwiZXhwIjoyMDY2NjIyMTI5fQ.nh7Hc_FHk8mpYE8YuGt_-vY23TlmMZKb9ckj2DSl_Dw"
+SUPABASE_URL = os.getenv('SUPABASE_URL')
+SUPABASE_KEY = os.getenv('SUPABASE_KEY')
 NOME_TABELA = "hmue_visitas"
 
-PATH_CREDENTIALS = 'C:/Users/55159/Desktop/Arquivos OneDrive/OneDrive/Área de Trabalho/Dashboards/Nonata/Credenciais_Google.json'
+PATH_CREDENTIALS = os.getenv('PATH_CREDENTIALS', 'credentials.json')
 SPREADSHEET_NAME = 'HMUE.Mapa de Visita'
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
